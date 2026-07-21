@@ -1,23 +1,26 @@
-import { recentActivities } from "../../data/dashboard";
+import SectionCard from "../ui/SectionCard";
+import ListItem from "../ui/ListItem";
+
+const activities = [
+  "Solved Two Sum",
+  "Completed HTML Course",
+  "Submitted Assignment 4",
+];
 
 function ActivityFeed() {
   return (
-    <div className="bg-white rounded-xl shadow border p-6">
-      <h2 className="text-2xl font-bold mb-4">
-        Recent Activity
-      </h2>
-
+    <SectionCard title="Recent Activity">
       <div className="space-y-3">
-        {recentActivities.map((activity) => (
-          <div
+        {activities.map((activity) => (
+          <ListItem
             key={activity}
-            className="border rounded-lg p-4 hover:bg-slate-50"
+            hoverColor="hover:bg-green-50"
           >
             {activity}
-          </div>
+          </ListItem>
         ))}
       </div>
-    </div>
+    </SectionCard>
   );
 }
 

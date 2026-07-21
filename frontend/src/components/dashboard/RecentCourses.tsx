@@ -1,24 +1,27 @@
-import { recentCourses } from "../../data/dashboard";
+import SectionCard from "../ui/SectionCard";
+import ListItem from "../ui/ListItem";
+
+const courses = [
+  "Web Development",
+  "Data Structures",
+  "Operating Systems",
+  "Database Management",
+];
 
 function RecentCourses() {
-
   return (
-    <div className="bg-white rounded-xl shadow border p-6">
-      <h2 className="text-2xl font-bold mb-4">
-        Recent Courses
-      </h2>
-
+    <SectionCard title="Recent Courses">
       <div className="space-y-3">
-        {recentCourses.map((course) => (
-          <div
+        {courses.map((course) => (
+          <ListItem
             key={course}
-            className="border rounded-lg p-4 hover:bg-slate-50"
+            hoverColor="hover:bg-blue-50"
           >
             {course}
-          </div>
+          </ListItem>
         ))}
       </div>
-    </div>
+    </SectionCard>
   );
 }
 

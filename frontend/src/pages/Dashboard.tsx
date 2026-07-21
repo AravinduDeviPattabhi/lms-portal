@@ -3,6 +3,7 @@ import StatsCards from "../components/dashboard/StatsCards";
 import RecentCourses from "../components/dashboard/RecentCourses";
 import UpcomingAssignments from "../components/dashboard/UpcomingAssignments";
 import ActivityFeed from "../components/dashboard/ActivityFeed";
+import DashboardGrid from "../components/dashboard/DashboardGrid";
 
 function Dashboard() {
   return (
@@ -11,11 +12,10 @@ function Dashboard() {
 
       <StatsCards />
 
-      <div className="grid grid-cols-2 gap-6">
-        <RecentCourses />
-
-        <UpcomingAssignments />
-      </div>
+      <DashboardGrid>
+  <RecentCourses />
+  <UpcomingAssignments />
+</DashboardGrid>
 
       <ActivityFeed />
     </div>

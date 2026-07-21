@@ -1,20 +1,31 @@
-
 import { stats } from "../../data/dashboard";
-function StatsCards() {
 
+function StatsCards() {
   return (
     <div className="grid grid-cols-4 gap-6">
       {stats.map((stat) => (
         <div
           key={stat.title}
-          className="bg-white rounded-xl shadow p-6 border"
+          className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 transition hover:shadow-xl"
         >
-          <h3 className="text-gray-500 text-sm">
-            {stat.title}
-          </h3>
+          <div className="flex justify-between items-center mb-4">
+            <span className="text-gray-500 font-medium">
+              {stat.title}
+            </span>
 
-          <p className="text-3xl font-bold mt-3">
+            <div
+              className={`${stat.color} w-12 h-12 rounded-xl flex items-center justify-center text-2xl`}
+            >
+              {stat.icon}
+            </div>
+          </div>
+
+          <h2 className="text-4xl font-bold text-slate-800">
             {stat.value}
+          </h2>
+
+          <p className="text-green-600 text-sm mt-2">
+            {stat.change}
           </p>
         </div>
       ))}

@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../config/prisma";
 
+
 export const register = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -88,6 +89,47 @@ export const login = async (req: Request, res: Response) => {
       message: "Login successful",
       token,
       user: userWithoutPassword,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+};
+
+
+import { Response } from "express";
+import prisma from "../config/prisma";
+import { AuthRequest } from "../middleware/authMiddleware";
+
+export const getProfile = async (req: AuthRequest, res: Response) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: true,
+        createdAt: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      user,
     });
   } catch (error) {
     console.error(error);

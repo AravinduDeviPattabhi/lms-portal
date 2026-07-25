@@ -1,83 +1,62 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import Layout from "../components/layout/Layout";
+import DashboardPage from "../features/dashboard/pages/DashboardPage";
+import CoursesPage from "../features/courses/pages/CoursesPage";
+import LoginPage from "../features/auth/pages/LoginPage";
+import CreateCoursePage from "../features/courses/pages/CreateCoursePage";
+import EditCoursePage from "../features/courses/pages/EditCoursePage";
 
-import Dashboard from "../pages/Dashboard";
-import Courses from "../pages/Courses";
-import CodingProblems from "../pages/CodingProblems";
-import Assignments from "../pages/Assignments";
-import Contests from "../pages/Contests";
-import Leaderboard from "../pages/Leaderboard";
-import Settings from "../pages/Settings";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 
 function AppRouter() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <Dashboard />
-            </Layout>
-          }
-        />
+    <Routes>
+      <Route path="/" element={<Navigate to="/login" replace />} />
 
-        <Route
-          path="/courses"
-          element={
-            <Layout>
-              <Courses />
-            </Layout>
-          }
-        />
+      <Route
+        path="/login"
+        element={
+          <PublicRoute>
+            <LoginPage />
+          </PublicRoute>
+        }
+      />
 
-        <Route
-          path="/coding-problems"
-          element={
-            <Layout>
-              <CodingProblems />
-            </Layout>
-          }
-        />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
 
-        <Route
-          path="/assignments"
-          element={
-            <Layout>
-              <Assignments />
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/contests"
-          element={
-            <Layout>
-              <Contests />
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/leaderboard"
-          element={
-            <Layout>
-              <Leaderboard />
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/settings"
-          element={
-            <Layout>
-              <Settings />
-            </Layout>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+      <Route
+        path="/courses"
+        element={
+          <ProtectedRoute>
+            <CoursesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses/create"
+        element={
+          <ProtectedRoute>
+            <CreateCoursePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/courses/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditCoursePage />
+          </ProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
 

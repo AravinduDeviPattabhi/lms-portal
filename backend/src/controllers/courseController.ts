@@ -1,19 +1,16 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
+import asyncHandler from "../utils/asyncHandler";
+import ApiError from "../utils/ApiError";
 
-export const createCourse = async (req: Request, res: Response) => {
-  try {
+export const createCourse = asyncHandler(
+  async (req: Request, res: Response) => {
     const { title, description, instructor, duration } = req.body;
 
-    // Validation
     if (!title || !description || !instructor || !duration) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
+      throw new ApiError(400, "All fields are required");
     }
 
-    // Create Course
     const course = await prisma.course.create({
       data: {
         title,
@@ -28,17 +25,11 @@ export const createCourse = async (req: Request, res: Response) => {
       message: "Course created successfully",
       course,
     });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
   }
-};
-export const getAllCourses = async (req: Request, res: Response) => {
-  try {
+);
+
+export const getAllCourses = asyncHandler(
+  async (req: Request, res: Response) => {
     const courses = await prisma.course.findMany({
       orderBy: {
         createdAt: "desc",
@@ -49,26 +40,44 @@ export const getAllCourses = async (req: Request, res: Response) => {
       success: true,
       courses,
     });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-    });
   }
-};
+);
 
-export const updateCourse = async (req: Request, res: Response) => {
-  try {
+export const getCourseById = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const {
-      title,
-      description,
-      instructor,
-      duration,
-    } = req.body;
+    const course = await prisma.course.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!course) {
+      throw new ApiError(404, "Course not found");
+    }
+
+    res.json({
+      success: true,
+      course,
+    });
+  }
+);
+
+export const updateCourse = asyncHandler(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const { title, description, instructor, duration } = req.body;
+
+    const existingCourse = await prisma.course.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    if (!existingCourse) {
+      throw new ApiError(404, "Course not found");
+    }
 
     const course = await prisma.course.update({
       where: {
@@ -87,50 +96,22 @@ export const updateCourse = async (req: Request, res: Response) => {
       message: "Course updated successfully",
       course,
     });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to update course",
-    });
   }
-};
+);
 
-export const getCourseById = async (req: Request, res: Response) => {
-  try {
+export const deleteCourse = asyncHandler(
+  async (req: Request, res: Response) => {
     const { id } = req.params;
 
-    const course = await prisma.course.findUnique({
+    const existingCourse = await prisma.course.findUnique({
       where: {
         id: Number(id),
       },
     });
 
-    if (!course) {
-      return res.status(404).json({
-        success: false,
-        message: "Course not found",
-      });
+    if (!existingCourse) {
+      throw new ApiError(404, "Course not found");
     }
-
-    res.json({
-      success: true,
-      course,
-    });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch course",
-    });
-  }
-};
-
-export const deleteCourse = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
 
     await prisma.course.delete({
       where: {
@@ -142,12 +123,5 @@ export const deleteCourse = async (req: Request, res: Response) => {
       success: true,
       message: "Course deleted successfully",
     });
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete course",
-    });
   }
-};
+);

@@ -6,6 +6,10 @@ import LoginPage from "../features/auth/pages/LoginPage";
 import CreateCoursePage from "../features/courses/pages/CreateCoursePage";
 import EditCoursePage from "../features/courses/pages/EditCoursePage";
 
+import StudentsPage from "../features/students/pages/StudentsPage";
+import CreateStudentPage from "../features/students/pages/CreateStudentPage";
+import EditStudentPage from "../features/students/pages/EditStudentPage";
+
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
@@ -56,6 +60,33 @@ function AppRouter() {
           </ProtectedRoute>
         }
       />
+        <Route
+          path="/students"
+          element={
+            <ProtectedRoute>
+              <StudentsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students/create"
+          element={
+            <ProtectedRoute>
+              <CreateStudentPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/students/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditStudentPage />
+            </ProtectedRoute>
+          }
+        />
+
     </Routes>
   );
 }

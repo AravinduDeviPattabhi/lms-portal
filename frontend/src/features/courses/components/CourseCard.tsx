@@ -3,14 +3,14 @@ import { Link } from "react-router-dom";
 
 import Card from "../../../components/ui/Card";
 
-import { deleteCourse } from "../api/courseApi";
 import type { Course } from "../types/course";
 
 interface CourseCardProps {
   course: Course;
+  onDelete: (id: number) => Promise<void>;
 }
 
-function CourseCard({ course }: CourseCardProps) {
+function CourseCard({ course, onDelete }: CourseCardProps) {
   const handleDelete = async () => {
     const confirmed = window.confirm(
       `Are you sure you want to delete "${course.title}"?`
@@ -18,16 +18,7 @@ function CourseCard({ course }: CourseCardProps) {
 
     if (!confirmed) return;
 
-    try {
-      await deleteCourse(course.id);
-
-      alert("Course deleted successfully!");
-
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-      alert("Failed to delete course.");
-    }
+    await onDelete(course.id);
   };
 
   return (

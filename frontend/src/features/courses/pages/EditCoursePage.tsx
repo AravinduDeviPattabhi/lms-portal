@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 import Sidebar from "../../dashboard/components/Sidebar";
 import Topbar from "../../dashboard/components/Topbar";
@@ -27,6 +28,7 @@ function EditCoursePage() {
         setCourse(response.course);
       } catch (error) {
         console.error(error);
+        toast.error("Failed to load course.");
       } finally {
         setLoading(false);
       }
@@ -39,12 +41,13 @@ function EditCoursePage() {
     try {
       await updateCourse(Number(id), data);
 
-      alert("Course updated successfully!");
+      toast.success("Course updated successfully!");
 
       navigate("/courses");
     } catch (error) {
       console.error(error);
-      alert("Failed to update course.");
+
+      toast.error("Failed to update course.");
     }
   };
 

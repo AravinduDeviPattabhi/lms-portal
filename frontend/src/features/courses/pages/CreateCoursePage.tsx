@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import Sidebar from "../../dashboard/components/Sidebar";
 import Topbar from "../../dashboard/components/Topbar";
@@ -14,12 +15,13 @@ function CreateCoursePage() {
     try {
       await createCourse(data);
 
-      alert("Course created successfully!");
+      toast.success("Course created successfully!");
 
       navigate("/courses");
     } catch (error) {
       console.error(error);
-      alert("Failed to create course.");
+
+      toast.error("Failed to create course.");
     }
   };
 

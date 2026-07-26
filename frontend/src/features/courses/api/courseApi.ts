@@ -1,4 +1,5 @@
 import api from "../../../services/api/axios";
+
 import type { Course } from "../types/course";
 import type { CourseFormData } from "../schemas/courseSchema";
 
@@ -12,7 +13,10 @@ export const getAllCourses = async (): Promise<GetCoursesResponse> => {
   return response.data;
 };
 
-
+export const getCourseById = async (id: number) => {
+  const response = await api.get(`/courses/${id}`);
+  return response.data;
+};
 
 export const createCourse = async (data: CourseFormData) => {
   const response = await api.post("/courses", data);
@@ -27,7 +31,7 @@ export const updateCourse = async (
   return response.data;
 };
 
-export const getCourseById = async (id: number) => {
-  const response = await api.get(`/courses/${id}`);
+export const deleteCourse = async (id: number) => {
+  const response = await api.delete(`/courses/${id}`);
   return response.data;
 };

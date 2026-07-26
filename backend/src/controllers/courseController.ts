@@ -127,3 +127,27 @@ export const getCourseById = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const deleteCourse = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    await prisma.course.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    res.json({
+      success: true,
+      message: "Course deleted successfully",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete course",
+    });
+  }
+};

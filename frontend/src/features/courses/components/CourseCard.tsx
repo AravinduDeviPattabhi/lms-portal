@@ -1,20 +1,39 @@
 import { BookOpen, Clock, User } from "lucide-react";
-import Card from "../../../components/ui/Card";
-import type { Course } from "../types/course";
 import { Link } from "react-router-dom";
+
+import Card from "../../../components/ui/Card";
+
+import { deleteCourse } from "../api/courseApi";
+import type { Course } from "../types/course";
 
 interface CourseCardProps {
   course: Course;
 }
 
 function CourseCard({ course }: CourseCardProps) {
+  const handleDelete = async () => {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete "${course.title}"?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteCourse(course.id);
+
+      alert("Course deleted successfully!");
+
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      alert("Failed to delete course.");
+    }
+  };
+
   return (
     <Card className="p-6 transition hover:shadow-lg">
       <div className="flex items-center justify-between">
-        <BookOpen
-          className="text-blue-600"
-          size={28}
-        />
+        <BookOpen className="text-blue-600" size={28} />
 
         <span className="rounded-full bg-blue-100 px-3 py-1 text-sm text-blue-700">
           Course
@@ -30,14 +49,6 @@ function CourseCard({ course }: CourseCardProps) {
       </p>
 
       <div className="mt-6 space-y-2">
-        <div className="mt-6">
-            <Link
-                to={`/courses/${course.id}/edit`}
-                className="block w-full rounded-lg bg-yellow-500 py-2 text-center text-white hover:bg-yellow-600"
-              >
-                Edit
-              </Link>
-        </div>
         <div className="flex items-center gap-2 text-slate-600">
           <User size={18} />
           <span>{course.instructor}</span>
@@ -47,6 +58,22 @@ function CourseCard({ course }: CourseCardProps) {
           <Clock size={18} />
           <span>{course.duration}</span>
         </div>
+      </div>
+
+      <div className="mt-6 flex gap-3">
+        <Link
+          to={`/courses/${course.id}/edit`}
+          className="flex-1 rounded-lg bg-yellow-500 py-2 text-center text-white hover:bg-yellow-600"
+        >
+          Edit
+        </Link>
+
+        <button
+          onClick={handleDelete}
+          className="flex-1 rounded-lg bg-red-600 py-2 text-white hover:bg-red-700"
+        >
+          Delete
+        </button>
       </div>
     </Card>
   );
